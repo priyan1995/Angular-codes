@@ -1,0 +1,63 @@
+<div class="breadcrumb">
+    <ul>
+        <li><a routerLink="/admin/dashboard"> {{ 'common.dashboard' | translate }} </a></li>
+        <li><a routerLink="/admin/evaluation-sheet/marks-sheet"> {{ 'common.marks_sheet' | translate | translate }}</a>
+        </li>
+        <li>{{ 'common.view' | translate }}</li>
+    </ul>
+</div>
+
+<div class="separator-breadcrumb border-top"></div>
+
+
+<ngb-accordion #acc="ngbAccordion" [closeOthers]="true" activeIds="ngb-panel-0">
+
+    <ngb-panel *ngFor="let section of sections; let section_index = index;">
+        <ng-template ngbPanelTitle isOpen="true">
+            <div class="row ss-aligned-center">
+                <div class="col-lg-7">
+                    <span>{{section.section_name}}</span>
+                </div>
+                <div class="col-lg-5">
+                    <div class="ss-section-mar-bar">
+                        <p class="mb-1 text-13 font-weight-light">
+                            {{section.total_marks}}%</p>
+                        <p class="mb-1">
+                            <ngb-progressbar type="success" value="{{section.total_marks}}" height="4px">
+                            </ngb-progressbar>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template ngbPanelContent>
+            <div [@animate]="{value:'*',params:{y:'20px',opacity:'0',delay:'0ms', duration: '400ms'}}">
+
+                <div class="text-right">
+                    <button class="btn btn-success" (click)="getAverageMarks(section_index)">{{ 'common.save' | translate }}</button>
+                </div>
+
+                <div class="row ss-quest-row" *ngFor="let question of section.questions; let question_index = index;">
+                    <div class="col-lg-6">
+                        <p> <strong>{{ 'common.question' | translate }} {{question_index + 1 }}-</strong> {{question.name}}</p>
+                    </div>
+                    <div class="col-lg-6">
+                        <form>
+                            <div class="form-group">
+                                <label>{{ 'evaluation_sheet.label.volume' | translate }} ({{ 'common.between' | translate }} 0 {{ 'common.and' | translate }} 10):</label>
+
+                                <span id="marksRange">{{question.marks}}</span>
+
+                                <input type="range" class="form-control" value="{{question.marks}}" name="vol" min="0" max="10" step="1" (change)="changeValue(section_index,question_index,$event)">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </ng-template>
+    </ngb-panel>
+
+
+
+</ngb-accordion>
